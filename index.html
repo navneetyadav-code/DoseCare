@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediTrack — Medication Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">✚</div>
+        <div>
+          <strong>MediTrack</strong>
+          <span>Medication made simple</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-page="dashboard"><span>⌂</span> Dashboard</button>
+        <button class="nav-item" data-page="medicines"><span>▣</span> Medicines</button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="tip-card">
+          <span class="tip-icon">✓</span>
+          <div>
+            <strong>Stay consistent</strong>
+            <p>Small habits make a big difference.</p>
+          </div>
+        </div>
+        <div class="profile-mini">
+          <div class="avatar">N</div>
+          <div><strong>Navneet</strong><span>My account</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="mobile-brand"><span class="brand-icon">✚</span><strong>MediTrack</strong></div>
+        <div class="topbar-actions">
+          <button class="icon-btn" title="Notifications">♧<span class="notification-dot"></span></button>
+          <div class="date-chip" id="dateChip"></div>
+        </div>
+      </header>
+
+      <section id="dashboardPage" class="page active-page">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">YOUR DAILY OVERVIEW</p>
+            <h1>Good morning, Navneet <span>👋</span></h1>
+            <p class="muted">Stay on track with your medications today.</p>
+          </div>
+          <button class="primary-btn" id="openAddFromDashboard">＋ Add medicine</button>
+        </div>
+
+        <div class="stats-grid">
+          <article class="card progress-card">
+            <div class="card-top"><span>Today's adherence</span><span class="status-pill success">● On track</span></div>
+            <div class="progress-content">
+              <div class="ring" id="progressRing"><div><strong id="progressPercent">0%</strong><small>complete</small></div></div>
+              <div>
+                <h3 id="progressTitle">Let's get started</h3>
+                <p id="progressText" class="muted">0 of 0 doses completed</p>
+                <div class="mini-bar"><span id="progressBar"></span></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card next-card">
+            <div class="card-top"><span>Next medication</span><span class="clock">◷</span></div>
+            <div id="nextMedication"></div>
+          </article>
+
+          <article class="card inventory-summary">
+            <div class="card-top"><span>Total inventory</span><span class="box-icon">▣</span></div>
+            <div class="inventory-number"><strong id="totalTablets">0</strong><span>tablets</span></div>
+            <p id="lowStockSummary" class="muted">All medication supplies look good.</p>
+          </article>
+        </div>
+
+        <div class="section-heading">
+          <div><p class="eyebrow">TODAY</p><h2>Medication schedule</h2></div>
+          <button class="text-btn" id="resetToday">Reset today's doses</button>
+        </div>
+
+        <div id="timeline" class="timeline"></div>
+
+        <div id="emptyDashboard" class="empty-state hidden">
+          <div class="empty-icon">💊</div>
+          <h3>No medications added yet</h3>
+          <p>Add your first medication to build today's schedule.</p>
+          <button class="primary-btn" id="emptyAddBtn">Add your first medicine</button>
+        </div>
+      </section>
+
+      <section id="medicinesPage" class="page">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">MEDICATION LIBRARY</p>
+            <h1>Your medicines</h1>
+            <p class="muted">Manage doses, schedules, and tablet inventory.</p>
+          </div>
+          <button class="primary-btn" id="openAddFromMedicines">＋ Add medicine</button>
+        </div>
+        <div id="medicineList" class="medicine-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <nav class="mobile-nav">
+    <button class="nav-item active" data-page="dashboard"><span>⌂</span>Home</button>
+    <button class="nav-item" data-page="medicines"><span>▣</span>Medicines</button>
+  </nav>
+
+  <div class="modal-backdrop" id="medicineModal">
+    <div class="modal">
+      <button class="modal-close" id="closeModal">×</button>
+      <div class="modal-header">
+        <div class="modal-icon">💊</div>
+        <div><p class="eyebrow">MEDICATION</p><h2 id="modalTitle">Add medicine</h2></div>
+      </div>
+
+      <form id="medicineForm">
+        <input type="hidden" id="medicineId">
+        <div class="form-grid">
+          <label class="field full">
+            <span>Medicine name</span>
+            <input id="medicineName" required placeholder="e.g. Paracetamol">
+          </label>
+          <label class="field">
+            <span>Dosage</span>
+            <input id="dosage" required placeholder="e.g. 500mg">
+          </label>
+          <label class="field">
+            <span>Time</span>
+            <input id="time" type="time" required>
+          </label>
+          <label class="field">
+            <span>Timing</span>
+            <select id="period" required>
+              <option>Morning</option><option>Afternoon</option><option>Night</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Meal instruction</span>
+            <select id="meal" required>
+              <option>Before Food</option><option>After Food</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Tablets remaining</span>
+            <input id="tablets" type="number" min="0" required placeholder="e.g. 20">
+          </label>
+          <label class="field">
+            <span>Strip size</span>
+            <input id="stripSize" type="number" min="1" required placeholder="e.g. 30">
+          </label>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="secondary-btn" id="cancelModal">Cancel</button>
+          <button type="submit" class="primary-btn">Save medicine</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"><span>✓</span><div><strong id="toastTitle">Done</strong><small id="toastText"></small></div></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
